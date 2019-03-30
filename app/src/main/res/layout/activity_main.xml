@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <io.github.hurshi.circleprogressbar.core.CircleProgressBar
+        android:id="@+id/progressbar1"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="100dp"
+        app:circle_background_color="#999"
+        app:circle_background_width="5dp"
+        app:circle_foreground_color="#f00"
+        app:circle_foreground_width="5dp"
+        app:circle_gravity="center"
+        app:circle_max="100"
+        app:circle_pause_size_percent="0.2"
+        app:circle_process="45"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/progressbar2"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <io.github.hurshi.circleprogressbar.core.CircleProgressBar
+        android:id="@+id/progressbar2"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="100dp"
+        app:circle_background_color="#999"
+        app:circle_background_width="5dp"
+        app:circle_foreground_color="#f00"
+        app:circle_foreground_width="10dp"
+        app:circle_gravity="center"
+        app:circle_max="100"
+        app:circle_process="45"
+        app:circle_round_corner="false"
+        app:layout_constraintLeft_toRightOf="@+id/progressbar1"
+        app:layout_constraintRight_toLeftOf="@+id/progressbar3"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <io.github.hurshi.circleprogressbar.core.CircleProgressBar
+        android:id="@+id/progressbar3"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="100dp"
+        app:circle_background_color="#999"
+        app:circle_background_width="10dp"
+        app:circle_foreground_color="#f00"
+        app:circle_foreground_width="5dp"
+        app:circle_gravity="center"
+        app:circle_max="100"
+        app:circle_process="45"
+        app:layout_constraintLeft_toRightOf="@+id/progressbar2"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <io.github.hurshi.circleprogressbar.core.CircleProgressBar
+        android:id="@+id/progressbar4"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="10dp"
+        app:circle_background_color="#999"
+        app:circle_background_width="5dp"
+        app:circle_foreground_color="#f00"
+        app:circle_foreground_width="5dp"
+        app:circle_gravity="inner"
+        app:circle_max="100"
+        app:circle_process="45"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/progressbar5"
+        app:layout_constraintTop_toBottomOf="@+id/progressbar1" />
+
+    <io.github.hurshi.circleprogressbar.core.CircleProgressBar
+        android:id="@+id/progressbar5"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="10dp"
+        app:circle_background_color="#999"
+        app:circle_background_width="5dp"
+        app:circle_foreground_color="#f00"
+        app:circle_foreground_width="10dp"
+        app:circle_gravity="inner"
+        app:circle_max="100"
+        app:circle_pause_size_percent="0.2"
+        app:circle_process="45"
+        app:layout_constraintLeft_toRightOf="@+id/progressbar4"
+        app:layout_constraintRight_toLeftOf="@+id/progressbar6"
+        app:layout_constraintTop_toBottomOf="@+id/progressbar1" />
+
+    <io.github.hurshi.circleprogressbar.core.CircleProgressBar
+        android:id="@+id/progressbar6"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="10dp"
+        app:circle_background_color="#f00"
+        app:circle_background_width="5dp"
+        app:circle_foreground_color="#f00"
+        app:circle_foreground_width="5dp"
+        app:circle_gravity="inner"
+        app:circle_max="100"
+        app:circle_process="45"
+        app:circle_round_corner="false"
+        app:layout_constraintLeft_toRightOf="@+id/progressbar5"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/progressbar1" />
+
+    <io.github.hurshi.circleprogressbar.core.CircleProgressBar
+        android:id="@+id/progressbar7"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="10dp"
+        app:circle_background_color="#999"
+        app:circle_background_width="5dp"
+        app:circle_foreground_color="#f00"
+        app:circle_foreground_width="5dp"
+        app:circle_gravity="outer"
+        app:circle_max="100"
+        app:circle_process="45"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/progressbar8"
+        app:layout_constraintTop_toBottomOf="@+id/progressbar4" />
+
+    <io.github.hurshi.circleprogressbar.core.CircleProgressBar
+        android:id="@+id/progressbar8"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="10dp"
+        app:circle_background_color="#f00"
+        app:circle_background_width="5dp"
+        app:circle_foreground_color="#f00"
+        app:circle_foreground_width="5dp"
+        app:circle_gravity="outer"
+        app:circle_max="100"
+        app:circle_process="45"
+        app:layout_constraintLeft_toRightOf="@+id/progressbar7"
+        app:layout_constraintRight_toLeftOf="@+id/progressbar9"
+        app:layout_constraintTop_toBottomOf="@+id/progressbar4" />
+
+    <io.github.hurshi.circleprogressbar.core.CircleProgressBar
+        android:id="@+id/progressbar9"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="10dp"
+        app:circle_background_color="#f00"
+        app:circle_background_width="5dp"
+        app:circle_foreground_color="#f00"
+        app:circle_foreground_width="5dp"
+        app:circle_gravity="outer"
+        app:circle_max="100"
+        app:circle_pause_size_percent="0.2"
+        app:circle_process="45"
+        app:circle_round_corner="false"
+        app:layout_constraintLeft_toRightOf="@+id/progressbar8"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/progressbar4" />
+
+    <SeekBar
+        android:id="@+id/seekbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:max="100"
+        android:progress="45"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/progressbar9" />
+
+</android.support.constraint.ConstraintLayout>
