@@ -208,6 +208,10 @@ public class CircleProgressBar extends AppCompatImageView {
         this.offsetStartAngle = value;
     }
 
+    public void setPauseSizePercent(float pauseSizePercent) {
+        this.pauseSizePercent = pauseSizePercent;
+    }
+
     public class Gravity {
         public static final int CENTER = 0;
         public static final int INNER = 1;
