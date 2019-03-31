@@ -13,12 +13,23 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
+import android.view.Gravity;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 
 public class CircleProgressBar extends AppCompatImageView {
+    private static final int DISPLAY_STATE_IMG = 0;
+    private static final int DISPLAY_STATE_PROGRESS = 1;
+    private static final int DISPLAY_STATE_LOADING = 3;
+
     private int processHighlightColor;
     private float processHighlightStrokeWidth;
     private int processBackgroundColor;
-    private float processBackgroundWidth;
+    private float processBackgroundStrokeWidth;
+    private int processLoadingColor;
+    private float processLoadingStrokeWidth;
+
     private float pauseSizePercent;
 
     private int max;
@@ -27,13 +38,13 @@ public class CircleProgressBar extends AppCompatImageView {
 
     private Paint paint = new Paint();
     private RectF highlightRect;
+    private RectF loadingRect;
     private RectF backgroundRect;
     private RectF pauseRect;
 
     private int processGravity;
     private boolean roundCorner;
-    private boolean showImg = false;
-
+    private int state = DISPLAY_STATE_PROGRESS;
 
     public CircleProgressBar(Context context) {
         this(context, null);
@@ -47,10 +58,12 @@ public class CircleProgressBar extends AppCompatImageView {
         super(context, attrs, defStyle);
 
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CircleProgressBar);
-        processHighlightColor = typedArray.getColor(R.styleable.CircleProgressBar_circle_foreground_color, Color.RED);
-        processHighlightStrokeWidth = typedArray.getDimension(R.styleable.CircleProgressBar_circle_foreground_width, 5);
-        processBackgroundColor = typedArray.getColor(R.styleable.CircleProgressBar_circle_background_color, Color.GRAY);
-        processBackgroundWidth = typedArray.getDimension(R.styleable.CircleProgressBar_circle_background_width, 5);
+        processHighlightColor = typedArray.getColor(R.styleable.CircleProgressBar_circle_progress_highlight_color, Color.RED);
+        processHighlightStrokeWidth = typedArray.getDimension(R.styleable.CircleProgressBar_circle_progress_highlight_width, 5);
+        processBackgroundColor = typedArray.getColor(R.styleable.CircleProgressBar_circle_progress_background_color, Color.GRAY);
+        processBackgroundStrokeWidth = typedArray.getDimension(R.styleable.CircleProgressBar_circle_progress_background_width, 5);
+        processLoadingColor = typedArray.getColor(R.styleable.CircleProgressBar_circle_progress_loading_color, Color.GRAY);
+        processLoadingStrokeWidth = typedArray.getDimension(R.styleable.CircleProgressBar_circle_progress_loading_width, 5);
         pauseSizePercent = typedArray.getFloat(R.styleable.CircleProgressBar_circle_pause_size_percent, 0f);
         max = typedArray.getInteger(R.styleable.CircleProgressBar_circle_max, 100);
         progress = typedArray.getInt(R.styleable.CircleProgressBar_circle_process, 0);
@@ -68,32 +81,39 @@ public class CircleProgressBar extends AppCompatImageView {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (showImg) {
+        if (state == DISPLAY_STATE_PROGRESS) {
+            tryInitProgressRect();
+
+            paint.setStyle(Style.STROKE);
+
+            //背景图
+            paint.setStrokeWidth(processBackgroundStrokeWidth);
+            paint.setColor(processBackgroundColor);
+            canvas.drawOval(backgroundRect, paint);
+
+            //画圆弧,圆环的进度
+            paint.setStrokeWidth(processHighlightStrokeWidth);
+            paint.setColor(processHighlightColor);
+            canvas.drawArc(highlightRect, -90.0f + offsetStartAngle, 360.0f * progress / max, false, paint);
+
+            if (null != pauseRect) {
+                paint.setStyle(Style.FILL);
+                canvas.drawRect(pauseRect, paint);
+            }
+        } else if (state == DISPLAY_STATE_LOADING) {
+            tryInitLoadingRect();
+            paint.setStyle(Style.STROKE);
+
+            //画圆弧,圆环的进度
+            paint.setStrokeWidth(processLoadingStrokeWidth);
+            paint.setColor(processLoadingColor);
+            canvas.drawArc(loadingRect, -90.0f + offsetStartAngle, 270f, false, paint);
+        } else {//显示图片
             super.onDraw(canvas);
-            return;
         }
-        tryInitOval();
-
-        paint.setStyle(Style.STROKE);
-
-        //背景图
-        paint.setStrokeWidth(processBackgroundWidth);
-        paint.setColor(processBackgroundColor);
-        canvas.drawOval(backgroundRect, paint);
-
-        //画圆弧,圆环的进度
-        paint.setStrokeWidth(processHighlightStrokeWidth);
-        paint.setColor(processHighlightColor);
-        canvas.drawArc(highlightRect, -90.0f + offsetStartAngle, 360.0f * progress / max, false, paint);
-
-        if (null != pauseRect) {
-            paint.setStyle(Style.FILL);
-            canvas.drawRect(pauseRect, paint);
-        }
-
     }
 
-    private void tryInitOval() {
+    private void tryInitProgressRect() {
         if (null == highlightRect || null == backgroundRect) {
             highlightRect = new RectF();
             backgroundRect = new RectF();
@@ -104,17 +124,17 @@ public class CircleProgressBar extends AppCompatImageView {
 
             switch (processGravity) {
                 case Gravity.INNER: {
-                    backgroundRadius = (size - processBackgroundWidth) / 2;
-                    foregroundRadius = backgroundRadius - (processBackgroundWidth + processHighlightStrokeWidth) / 2;
+                    backgroundRadius = (size - processBackgroundStrokeWidth) / 2;
+                    foregroundRadius = backgroundRadius - (processBackgroundStrokeWidth + processHighlightStrokeWidth) / 2;
                     break;
                 }
-                case Gravity.OUTTER: {
+                case Gravity.OUTER: {
                     foregroundRadius = (size - processHighlightStrokeWidth) / 2;
-                    backgroundRadius = foregroundRadius - (processBackgroundWidth + processHighlightStrokeWidth) / 2;
+                    backgroundRadius = foregroundRadius - (processBackgroundStrokeWidth + processHighlightStrokeWidth) / 2;
                     break;
                 }
                 default: {//Gravity.CENTER
-                    float baseRadius = (size - Math.max(processHighlightStrokeWidth, processBackgroundWidth)) / 2;
+                    float baseRadius = (size - Math.max(processHighlightStrokeWidth, processBackgroundStrokeWidth)) / 2;
                     foregroundRadius = baseRadius;
                     backgroundRadius = baseRadius;
                 }
@@ -127,6 +147,14 @@ public class CircleProgressBar extends AppCompatImageView {
                 float halfPauseWidth = (size * pauseSizePercent) / 2;
                 pauseRect.set(getPivotX() - halfPauseWidth, getPivotY() - halfPauseWidth, getPivotX() + halfPauseWidth, getPivotY() + halfPauseWidth);
             }
+        }
+    }
+
+    private void tryInitLoadingRect() {
+        if (null == loadingRect) {
+            loadingRect = new RectF();
+            float radius = (Math.min(getWidth() - getPaddingLeft() - getPaddingRight(), getHeight() - getPaddingTop() - getPaddingBottom()) - processLoadingStrokeWidth) / 2;
+            loadingRect.set(getPivotX() - radius, getPivotY() - radius, getPivotX() + radius, getPivotY() + radius);
         }
     }
 
@@ -144,7 +172,8 @@ public class CircleProgressBar extends AppCompatImageView {
     }
 
     public synchronized void setProgress(int progress) {
-        if (showImg) showImg = false;
+        if (state != DISPLAY_STATE_PROGRESS) state = DISPLAY_STATE_PROGRESS;
+        stopLoading();
         if (progress < 0) {
             throw new IllegalArgumentException("progress not less than 0");
         }
@@ -157,19 +186,19 @@ public class CircleProgressBar extends AppCompatImageView {
 
     @Override
     public void setImageBitmap(Bitmap bm) {
-        this.showImg = true;
+        this.state = DISPLAY_STATE_IMG;
         super.setImageBitmap(bm);
     }
 
     @Override
     public void setImageDrawable(@Nullable Drawable drawable) {
-        this.showImg = true;
+        this.state = DISPLAY_STATE_IMG;
         super.setImageDrawable(drawable);
     }
 
     @Override
     public void setImageResource(int resId) {
-        this.showImg = true;
+        this.state = DISPLAY_STATE_IMG;
         super.setImageResource(resId);
     }
 
@@ -185,8 +214,8 @@ public class CircleProgressBar extends AppCompatImageView {
         this.processBackgroundColor = processBackgroundColor;
     }
 
-    public void setProcessBackgroundWidth(float processBackgroundWidth) {
-        this.processBackgroundWidth = processBackgroundWidth;
+    public void setProcessBackgroundStrokeWidth(float processBackgroundStrokeWidth) {
+        this.processBackgroundStrokeWidth = processBackgroundStrokeWidth;
     }
 
     public void setProcessGravity(int processGravity) {
@@ -212,10 +241,54 @@ public class CircleProgressBar extends AppCompatImageView {
         this.pauseSizePercent = pauseSizePercent;
     }
 
+    public void setProcessLoadingColor(int processLoadingColor) {
+        this.processLoadingColor = processLoadingColor;
+    }
+
+    public void setProcessLoadingStrokeWidth(float processLoadingStrokeWidth) {
+        this.processLoadingStrokeWidth = processLoadingStrokeWidth;
+    }
+
+    public void loading() {
+        loading(null);
+    }
+
+    public void loading(@Nullable Animation animation) {
+        synchronized (CircleProgressBar.class) {
+            if (null == getAnimation()) {
+                this.state = DISPLAY_STATE_LOADING;
+                if (null == animation) {
+                    animation = new RotateAnimation(0, 360f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                    animation.setDuration(800);
+                    animation.setRepeatCount(-1);
+                    animation.setRepeatMode(Animation.RESTART);
+                    animation.setInterpolator(new LinearInterpolator());
+                }
+                startAnimation(animation);
+            }
+        }
+    }
+
+    public boolean isLoading() {
+        return null != getAnimation();
+    }
+
+    public void stopLoading() {
+        if (null != getAnimation()) {
+            synchronized (CircleProgressBar.class) {
+                if (null != getAnimation()) {
+                    this.state = DISPLAY_STATE_PROGRESS;
+                    invalidate();
+                    getAnimation().cancel();
+                    setAnimation(null);
+                }
+            }
+        }
+    }
+
     public class Gravity {
         public static final int CENTER = 0;
         public static final int INNER = 1;
-        public static final int OUTTER = 2;
+        public static final int OUTER = 2;
     }
-
 }

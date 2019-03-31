@@ -2,6 +2,7 @@ package io.github.hurshi.CircleProgressBar;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.SeekBar;
 
 import io.github.hurshi.circleprogressbar.core.CircleProgressBar;
@@ -26,8 +27,6 @@ public class MainActivity extends AppCompatActivity {
 
         findViews();
         initViews();
-
-
     }
 
 
@@ -35,27 +34,66 @@ public class MainActivity extends AppCompatActivity {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                circleProgressBar1.setProgress(progress);
-                circleProgressBar2.setProgress(progress);
-                circleProgressBar3.setProgress(progress);
-                circleProgressBar4.setProgress(progress);
-                circleProgressBar5.setProgress(progress);
-                circleProgressBar6.setProgress(progress);
-                circleProgressBar7.setProgress(progress);
-                circleProgressBar8.setProgress(progress);
-                circleProgressBar9.setProgress(progress);
+                setProcess(progress,
+                        circleProgressBar1,
+                        circleProgressBar2,
+                        circleProgressBar3,
+                        circleProgressBar4,
+                        circleProgressBar5,
+                        circleProgressBar6,
+                        circleProgressBar7,
+                        circleProgressBar8,
+                        circleProgressBar9);
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
             }
         });
+
+        circleProgressBar6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (circleProgressBar6.isLoading())
+                    circleProgressBar6.stopLoading();
+                else circleProgressBar6.loading();
+            }
+        });
+
+        setClickLoading(circleProgressBar1,
+                circleProgressBar2,
+                circleProgressBar3,
+                circleProgressBar4,
+                circleProgressBar5,
+                circleProgressBar6,
+                circleProgressBar7,
+                circleProgressBar8,
+                circleProgressBar9);
+
+        circleProgressBar6.loading();
+    }
+
+    private void setProcess(int progress, CircleProgressBar... circleProgressBars) {
+        for (CircleProgressBar c : circleProgressBars) {
+            c.setProgress(progress);
+        }
+    }
+
+    private void setClickLoading(CircleProgressBar... circleProgressBars) {
+        for (final CircleProgressBar c : circleProgressBars) {
+            c.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (c.isLoading()) c.stopLoading();
+                    else c.loading();
+                }
+            });
+        }
+
     }
 
     private void findViews() {

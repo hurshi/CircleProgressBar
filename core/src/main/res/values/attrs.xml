@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="CircleProgressBar">
-        <attr name="circle_foreground_color" format="color" />
-        <attr name="circle_background_color" format="color" />
-        <attr name="circle_foreground_width" format="dimension" />
-        <attr name="circle_background_width" format="dimension" />
-
-        <attr name="circle_pause_size_percent" format="float" />
+        <attr name="circle_progress_highlight_color" format="color" />
+        <attr name="circle_progress_background_color" format="color" />
+        <attr name="circle_progress_highlight_width" format="dimension" />
+        <attr name="circle_progress_background_width" format="dimension" />
+        <attr name="circle_progress_loading_color" format="color" />
+        <attr name="circle_progress_loading_width" format="dimension" />
         <attr name="circle_max" format="integer" />
         <attr name="circle_process" format="integer" />
+        <attr name="circle_pause_size_percent" format="float" />
         <attr name="circle_offset_start_angle" format="integer" />
         <attr name="circle_round_corner" format="boolean" />
         <attr name="circle_gravity">
