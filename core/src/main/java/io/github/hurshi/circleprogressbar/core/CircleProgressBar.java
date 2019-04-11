@@ -13,7 +13,6 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
@@ -76,6 +75,7 @@ public class CircleProgressBar extends AppCompatImageView {
         paint.setAntiAlias(true);
         paint.setStyle(Style.STROKE);
         setRoundCorner(roundCorner);
+
     }
 
 
@@ -117,6 +117,8 @@ public class CircleProgressBar extends AppCompatImageView {
         if (null == highlightRect || null == backgroundRect) {
             highlightRect = new RectF();
             backgroundRect = new RectF();
+            setPivotX(getWidth() / 2.0f);
+            setPivotY(getHeight() / 2.0f);
 
             float foregroundRadius;
             float backgroundRadius;
@@ -152,6 +154,8 @@ public class CircleProgressBar extends AppCompatImageView {
 
     private void tryInitLoadingRect() {
         if (null == loadingRect) {
+            setPivotX(getWidth() / 2.0f);
+            setPivotY(getHeight() / 2.0f);
             loadingRect = new RectF();
             float radius = (Math.min(getWidth() - getPaddingLeft() - getPaddingRight(), getHeight() - getPaddingTop() - getPaddingBottom()) - processLoadingStrokeWidth) / 2;
             loadingRect.set(getPivotX() - radius, getPivotY() - radius, getPivotX() + radius, getPivotY() + radius);
